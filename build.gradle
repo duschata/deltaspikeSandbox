@@ -1,0 +1,37 @@
+plugins {
+    id "java" // you'll likely also want the WAR plugin
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+}
+
+//def weldVersion = '3.1.8.Final'
+def weldVersion = '2.3.3.Final'
+repositories {
+    mavenCentral()
+}
+dependencyManagement {
+    imports {
+        mavenBom 'org.apache.deltaspike.distribution:distributions-bom:1.9.5'
+    }
+}
+
+
+dependencies {
+
+    compileOnly 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-api'
+    compileOnly 'org.apache.deltaspike.core:deltaspike-core-api'
+
+    implementation 'org.apache.deltaspike.core:deltaspike-core-impl'
+    implementation 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-weld'
+
+    implementation group: 'org.jboss.weld.se', name: 'weld-se-core', version: weldVersion
+
+}
+sourceSets {
+    main {
+        //To use standard bean discovery mechanisms, CDI expects beans.xml to be in your classes directory
+        output.resourcesDir = output.classesDir
+    }
+    test {
+        output.resourcesDir = output.classesDir
+    } // and any other sourceSet you might have.
+}
