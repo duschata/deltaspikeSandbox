@@ -1,29 +1,39 @@
 plugins {
     id "java" // you'll likely also want the WAR plugin
-    id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
-//def weldVersion = '3.1.8.Final'
-def weldVersion = '2.3.3.Final'
 repositories {
     mavenCentral()
 }
-dependencyManagement {
-    imports {
-        mavenBom 'org.apache.deltaspike.distribution:distributions-bom:1.9.5'
-    }
+
+ext{
+    weldVersion             = '3.1.8.Final'
+    deltaspikeVersion       = '1.9.5'
+    assertjVersion          = '3.20.2'
+    weldJUnit5Version       = '2.0.2.Final'
+    junitPlatformVersion    = '1.7.2'
+    junitJupiterVersion     = '5.7.2'
 }
 
 
 dependencies {
 
-    compileOnly 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-api'
-    compileOnly 'org.apache.deltaspike.core:deltaspike-core-api'
+    compileOnly 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-api:' + deltaspikeVersion
+    compileOnly 'org.apache.deltaspike.core:deltaspike-core-api:' + deltaspikeVersion
 
-    implementation 'org.apache.deltaspike.core:deltaspike-core-impl'
-    implementation 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-weld'
+    implementation 'org.apache.deltaspike.core:deltaspike-core-impl:' + deltaspikeVersion
+    implementation 'org.apache.deltaspike.cdictrl:deltaspike-cdictrl-weld:' + deltaspikeVersion
+    implementation 'org.jboss.weld.se:weld-se-core:' + weldVersion
 
-    implementation group: 'org.jboss.weld.se', name: 'weld-se-core', version: weldVersion
+    implementation(group: 'org.assertj',                name: 'assertj-core',           version: "${assertjVersion}")
+    implementation(group: 'org.jboss.weld',             name: 'weld-junit5',            version: "${weldJUnit5Version}")
+    implementation(group: 'org.junit.jupiter',          name: 'junit-jupiter-engine',   version: "${junitJupiterVersion}")
+
+    testImplementation 'org.apache.deltaspike.modules:deltaspike-test-control-module-api:' + deltaspikeVersion
+
+    test {
+        useJUnitPlatform()
+    }
 
 }
 sourceSets {

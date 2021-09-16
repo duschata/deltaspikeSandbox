@@ -1,12 +1,19 @@
 package de.foo.bar;
 
-import javax.inject.Inject;
+import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+
+import org.apache.deltaspike.core.api.provider.BeanProvider;
+
+import de.foo.bar.greetings.Greeting;
+
+@ApplicationScoped
 public class Greeter {
-    @Inject
-    private Hello hello;
-
-    public void greet () {
-        hello.sayHallo();
+    public List<Greeting> getGreetings() {
+        List<Greeting> greetings = BeanProvider.getContextualReferences(Greeting.class, true);
+        return greetings;
     }
+
+
 }
